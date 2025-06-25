@@ -1,3 +1,5 @@
+import 'package:critijoy_note/ui/pages/home/home.dart';
+import 'package:critijoy_note/ui/pages/Anime/anime_page.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MyApp());
@@ -9,18 +11,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Material App',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Material App Bar'),
-        ),
-        body: const Center(
-          child: Row(children: [
-            Text('Hello World'),
-            
-          ],),
-          
-        ),
-      ),
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/home',
+      routes: {
+        "/anime": (context) => AnimePage(),
+        "/home": (context) => ScreenHome(),
+      },
+      home: ScreenHome(),
     );
   }
 }
