@@ -1,3 +1,4 @@
+import 'package:critijoy_note/config/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class Stars extends StatelessWidget {
@@ -7,11 +8,11 @@ class Stars extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(Icons.star, color: Colors.yellow),
-        Icon(Icons.star, color: Colors.yellow),
-        Icon(Icons.star, color: Colors.yellow),
-        Icon(Icons.star, color: Colors.yellow),
-        Icon(Icons.star, color: Colors.yellow),
+        Icon(Icons.star, color: yellow),
+        Icon(Icons.star, color: yellow),
+        Icon(Icons.star, color: yellow),
+        Icon(Icons.star, color: yellow),
+        Icon(Icons.star, color: yellow),
       ],
     );
   }

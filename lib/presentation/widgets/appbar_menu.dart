@@ -1,7 +1,8 @@
+import 'package:critijoy_note/config/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class appBar_Menu extends PreferredSize implements PreferredSizeWidget {
-  const appBar_Menu({
+class AppBarMenu extends PreferredSize implements PreferredSizeWidget {
+  const AppBarMenu({
     super.key,
     required super.preferredSize,
     required super.child,
@@ -10,26 +11,28 @@ class appBar_Menu extends PreferredSize implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: Colors.blue,
+      backgroundColor: blue,
       centerTitle: true,
-      title: Text('CritiJoy_Note', style: TextStyle(color: Colors.black)),
+      title: Text('CritiJoy_Note', style: TextStyle(color: black)),
       actions: [
         Row(
           children: [
             IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.add_circle_outline, color: Colors.black),
+              onPressed: () {
+                Navigator.pushNamed(context, '/addreview');
+              },
+              icon: Icon(Icons.add_circle_outline, color: black),
             ),
             IconButton(
               onPressed: () {},
-              icon: Icon(Icons.search, color: Colors.black),
+              icon: Icon(Icons.search, color: black),
             ),
           ],
         ),
       ],
       leading: IconButton(
         onPressed: () {},
-        icon: Icon(Icons.dehaze_rounded, color: Colors.black),
+        icon: Icon(Icons.dehaze_rounded, color: black),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:critijoy_note/config/theme/theme.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionAnime extends StatelessWidget {
@@ -9,7 +10,7 @@ class DescriptionAnime extends StatelessWidget {
     return Expanded(
       child: Text(
         description,
-        style: TextStyle(fontSize: 15, color: Colors.grey[700]),
+        style: TextStyle(fontSize: 15, color: black),
         maxLines: 5,
         overflow: TextOverflow.ellipsis,
       ),

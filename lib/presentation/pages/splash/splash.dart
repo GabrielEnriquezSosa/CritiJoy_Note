@@ -1,14 +1,14 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 
-class ScreenHome extends StatefulWidget {
-  const ScreenHome({super.key});
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
 
   @override
-  State<ScreenHome> createState() => _ScreenHomeState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _ScreenHomeState extends State<ScreenHome> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +62,7 @@ class _ScreenHomeState extends State<ScreenHome> {
         color: Colors.white,
         child: FilledButton(
           onPressed: () {
-            Navigator.pushNamed(context, "/anime");
+            Navigator.pushNamed(context, "/home");
           },
           style: ButtonStyle(
             backgroundColor: WidgetStateProperty.all(Colors.blue),
