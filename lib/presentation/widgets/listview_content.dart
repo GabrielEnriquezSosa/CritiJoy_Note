@@ -5,6 +5,7 @@ import 'package:critijoy_note/presentation/widgets/description_anime.dart';
 import 'package:critijoy_note/presentation/widgets/image_anime.dart';
 import 'package:critijoy_note/presentation/widgets/title_anime.dart';
 import 'package:critijoy_note/domain/entities/review.dart';
+import 'package:go_router/go_router.dart';
 
 class ListViewContent extends StatelessWidget {
   final Review typeContenido;
@@ -30,7 +31,7 @@ class ListViewContent extends StatelessWidget {
                       title: 'Editar review',
                       onPressed: () {
                         Navigator.pop(context);
-                        Navigator.pushNamed(context, "/editanime");
+                        context.push('/editreview');
                       },
                     ),
                     const SizedBox(width: 20),

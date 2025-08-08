@@ -21,4 +21,9 @@ class ReviewRepositoryImpl extends ReviewRepository {
   Future<void> deleteReview(String id) {
     return dataSource.deleteReview(id);
   }
+
+  @override
+  Future<void> updateReview(Review review) {
+    return dataSource.updateReview(review);
+  }
 }

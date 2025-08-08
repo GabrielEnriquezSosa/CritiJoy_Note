@@ -15,7 +15,26 @@ class ReviewFakeDataSource implements ReviewDataSource {
 
   @override
   Future<void> addReview(Review review) async {
-    _data.add(review as ReviewModel);
+    _data.add(
+      review is ReviewModel
+          ? review
+          : ReviewModel(
+            id: review.id,
+            titulo: review.titulo,
+            sinopsis: review.sinopsis,
+            imagen: review.imagen,
+            genero: review.genero,
+            valoracion: review.valoracion,
+            personajesFavoritos: review.personajesFavoritos,
+            totalCapitulos: review.totalCapitulos,
+            plataforma: review.plataforma,
+            autor: review.autor,
+            type_content_id: review.type_content_id,
+            temporada: review.temporada,
+            duracion: review.duracion,
+            usuarioId: review.usuarioId,
+          ),
+    );
   }
 
   @override
@@ -29,8 +48,10 @@ class ReviewFakeDataSource implements ReviewDataSource {
   Future<void> deleteReview(String id) async {
     _data.removeWhere((r) => r.id == id);
   }
-}
 
-// final reviewRepository = ReviewRepositoryImpl(ReviewFakeDataSource());
-// final useCase = GetReviewsByType(reviewRepository);
-// final dramaReviews = useCase("K-Drama");
+  @override
+  Future<void> updateReview(Review review) {
+    // TODO: implement updateReview
+    throw UnimplementedError();
+  }
+}

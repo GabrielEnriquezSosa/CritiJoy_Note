@@ -1,5 +1,6 @@
 import 'package:critijoy_note/config/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AppBarMenu extends PreferredSize implements PreferredSizeWidget {
   const AppBarMenu({
@@ -19,7 +20,7 @@ class AppBarMenu extends PreferredSize implements PreferredSizeWidget {
           children: [
             IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/addreview');
+                context.push('/addreview');
               },
               icon: Icon(Icons.add_circle_outline, color: black),
             ),
@@ -30,10 +31,6 @@ class AppBarMenu extends PreferredSize implements PreferredSizeWidget {
           ],
         ),
       ],
-      leading: IconButton(
-        onPressed: () {},
-        icon: Icon(Icons.dehaze_rounded, color: black),
-      ),
     );
   }
 }

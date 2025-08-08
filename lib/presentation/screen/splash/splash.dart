@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -62,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
         color: Colors.white,
         child: FilledButton(
           onPressed: () {
-            Navigator.pushNamed(context, "/home");
+            context.push('/home');
           },
           style: ButtonStyle(
             backgroundColor: WidgetStateProperty.all(Colors.blue),

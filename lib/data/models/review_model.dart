@@ -31,7 +31,7 @@ class ReviewModel extends Review {
       autor: json['Director'] ?? '',
       valoracion: (json['Rating'] ?? 0).toDouble(),
       totalCapitulos: json['Episodes'] ?? 0,
-      temporada: 1, // Si no tienes este dato, pon un valor por defecto
+      temporada: 1,
       personajesFavoritos: List<String>.from(json['Characters'] ?? []),
       duracion: json['Duration'] ?? '',
       imagen: json['Image'] ?? 'assets/images/anime.png',
