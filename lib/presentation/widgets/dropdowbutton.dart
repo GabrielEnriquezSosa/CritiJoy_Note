@@ -1,4 +1,4 @@
-import 'package:critijoy_note/config/theme/theme.dart';
+import 'package:critijoy_note/config/theme/app_theme.dart';
 import 'package:critijoy_note/data/models/contenido_model.dart';
 import 'package:flutter/material.dart';
 
@@ -14,6 +14,7 @@ class DropDownButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = AppTheme().getTheme().textSelectionTheme.selectionColor;
     return Container(
       width: 200,
       decoration: BoxDecoration(
@@ -25,6 +26,12 @@ class DropDownButton extends StatelessWidget {
         children: [
           DropdownMenu(
             hintText: OptionContenidoImplList.contenidolist[0].type,
+            textStyle: TextStyle(
+              decoration: TextDecoration.none,
+              decorationColor: colors,
+              fontStyle: FontStyle.normal,
+              color: colors,
+            ),
             onSelected: (OptionContenidoImpl? value) {
               if (value != null) {
                 if (value.type == 'Anime') {
@@ -40,7 +47,7 @@ class DropDownButton extends StatelessWidget {
                       (menu) => DropdownMenuEntry<OptionContenidoImpl>(
                         value: menu,
                         label: menu.type,
-                        leadingIcon: Icon(menu.icon, color: black),
+                        leadingIcon: Icon(menu.icon, color: colors),
                       ),
                     )
                     .toList(),

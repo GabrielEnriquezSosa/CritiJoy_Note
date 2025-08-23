@@ -1,4 +1,4 @@
-import 'package:critijoy_note/config/theme/theme.dart';
+import 'package:critijoy_note/config/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
@@ -26,7 +26,8 @@ class Button extends StatelessWidget {
           title,
           style: TextStyle(
             fontSize: 20,
-            color: theme().colorScheme.onSecondary,
+            color:
+                AppTheme(selectedColor: 1).getTheme().colorScheme.onSecondary,
           ),
         ),
       ),

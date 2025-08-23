@@ -1,18 +1,20 @@
+import 'package:critijoy_note/presentation/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:critijoy_note/config/theme/theme.dart';
 import 'package:critijoy_note/presentation/widgets/button.dart';
 import 'package:critijoy_note/presentation/widgets/description_anime.dart';
 import 'package:critijoy_note/presentation/widgets/image_anime.dart';
 import 'package:critijoy_note/presentation/widgets/title_anime.dart';
 import 'package:critijoy_note/domain/entities/review.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class ListViewContent extends StatelessWidget {
+class ListViewContent extends ConsumerWidget {
   final Review typeContenido;
   const ListViewContent({super.key, required this.typeContenido});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorCard = ref.watch(colorCardProvider).getTheme().cardTheme.color;
     return InkWell(
       onLongPress: () {
         showDialog(
@@ -39,7 +41,6 @@ class ListViewContent extends StatelessWidget {
                       title: 'Eliminar review',
                       onPressed: () {
                         Navigator.pop(context);
-                        // Aquí puedes llamar a tu lógica de eliminación si lo deseas
                       },
                     ),
                   ],
@@ -51,7 +52,7 @@ class ListViewContent extends StatelessWidget {
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 4.5),
-        color: lightgrey,
+        color: colorCard,
         child: Row(
           children: [
             ImageAnime(
@@ -61,7 +62,6 @@ class ListViewContent extends StatelessWidget {
               borderRadius: 0,
             ),
             const SizedBox(width: 10),
-            // Elimina el Expanded aquí
             TitleContent(title: typeContenido.titulo),
             const SizedBox(height: 5),
             DescriptionAnime(description: typeContenido.sinopsis),

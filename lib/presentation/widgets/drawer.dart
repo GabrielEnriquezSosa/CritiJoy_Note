@@ -1,17 +1,19 @@
 import 'package:critijoy_note/config/menu/menu_items.dart';
-import 'package:critijoy_note/config/theme/theme.dart';
+import 'package:critijoy_note/config/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class NavigationDrawerList extends StatefulWidget {
+class NavigationDrawerList extends ConsumerStatefulWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   const NavigationDrawerList({super.key, required this.scaffoldKey});
 
   @override
-  State<NavigationDrawerList> createState() => _NavigationDrawerListState();
+  ConsumerState<NavigationDrawerList> createState() =>
+      _NavigationDrawerListState();
 }
 
-class _NavigationDrawerListState extends State<NavigationDrawerList> {
+class _NavigationDrawerListState extends ConsumerState<NavigationDrawerList> {
   int navDrawerIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,10 @@ class _NavigationDrawerListState extends State<NavigationDrawerList> {
           navDrawerIndex = value;
         });
         final menuitems = appMenuItems[value];
-        context.push(menuitems.link);
+        // que cuando tenga link el menu item vaya a la direccion del link del item y cuando no vaya a ningun lugar usa el context.push(menuitems.link);
+        if (menuitems.link != null) {
+          context.push(menuitems.link!);
+        }
         widget.scaffoldKey.currentState?.closeDrawer();
       },
       children: [
@@ -82,7 +87,15 @@ class _NavigationDrawerListState extends State<NavigationDrawerList> {
           child: Text('Mas Opciones'),
         ),
         ...appMenuItems
-            .sublist(4)
+            .sublist(4, 5)
+            .map(
+              (item) => NavigationDrawerDestination(
+                icon: item.icon,
+                label: Text(item.title),
+              ),
+            ),
+        ...appMenuItems
+            .sublist(5)
             .map(
               (item) => NavigationDrawerDestination(
                 icon: item.icon,

@@ -1,12 +1,13 @@
 import 'package:critijoy_note/presentation/widgets/stars.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TitleContent extends StatelessWidget {
+class TitleContent extends ConsumerWidget {
   final String title;
   const TitleContent({super.key, required this.title});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Expanded(
       child: Column(
         children: [
