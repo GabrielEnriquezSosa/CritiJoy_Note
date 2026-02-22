@@ -50,7 +50,7 @@ class AppTheme {
       useMaterial3: true,
       colorSchemeSeed: colorList[selectedColor],
       brightness: isDarkMode ? Brightness.dark : Brightness.light,
-      cardTheme: CardTheme(color: colorList[selectedModeCardColor]),
+      cardTheme: CardThemeData(color: colorList[selectedModeCardColor]),
     );
   }
 }

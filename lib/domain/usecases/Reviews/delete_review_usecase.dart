@@ -1,11 +1,10 @@
 import 'package:critijoy_note/domain/entities/review.dart';
 import 'package:critijoy_note/domain/repositories/review_repositories.dart';
 
-class GetReviewsByType {
+abstract class DeleteReviewUsecase {
   final ReviewRepository repository;
-  GetReviewsByType(this.repository);
-
-  Future<List<Review>> call(String type) {
-    return repository.getReviewsByType(type);
+  DeleteReviewUsecase(this.repository);
+  Future<void> call(Review review) {
+    return repository.deleteReview(review.id);
   }
 }

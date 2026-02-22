@@ -56,15 +56,15 @@ class ListViewContent extends ConsumerWidget {
         child: Row(
           children: [
             ImageAnime(
-              imagePath: typeContenido.imagen,
+              imagePath: typeContenido.image,
               width: 100,
               height: 100,
               borderRadius: 0,
             ),
             const SizedBox(width: 10),
-            TitleContent(title: typeContenido.titulo),
+            TitleContent(title: typeContenido.title),
             const SizedBox(height: 5),
-            DescriptionAnime(description: typeContenido.sinopsis),
+            DescriptionAnime(description: typeContenido.reviewText),
           ],
         ),
       ),

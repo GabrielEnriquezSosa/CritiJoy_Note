@@ -1,8 +1,22 @@
 import 'package:critijoy_note/config/theme/app_theme.dart';
-import 'package:critijoy_note/data/models/contenido_model.dart';
+import 'package:critijoy_note/domain/entities/review.dart';
 import 'package:flutter/material.dart';
 
-class DropDownButton extends StatelessWidget {
+enum OptionContenidoImpl {
+  Anime,
+  Peliculas,
+  Caricaturas,
+  RealityShow,
+  Dorama,
+  Telenovela,
+  DibujosAnimados,
+  KDrama,
+  Cartoon,
+  DoramaChino,
+  contenidolist,
+}
+
+class DropDownButton extends StatefulWidget {
   const DropDownButton({
     super.key,
     required this.onOptionSelected,
@@ -11,6 +25,13 @@ class DropDownButton extends StatelessWidget {
 
   final void Function(bool anime) onOptionSelected;
   final IconData icon;
+
+  @override
+  State<DropDownButton> createState() => _DropDownButtonState();
+}
+
+class _DropDownButtonState extends State<DropDownButton> {
+  Review? review;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +46,9 @@ class DropDownButton extends StatelessWidget {
       child: Column(
         children: [
           DropdownMenu(
-            hintText: OptionContenidoImplList.contenidolist[0].type,
+            hintText:
+                review?.contentType.toString() ??
+                OptionContenidoImpl.Anime.toString(),
             textStyle: TextStyle(
               decoration: TextDecoration.none,
               decorationColor: colors,
@@ -34,21 +57,21 @@ class DropDownButton extends StatelessWidget {
             ),
             onSelected: (OptionContenidoImpl? value) {
               if (value != null) {
-                if (value.type == 'Anime') {
-                  onOptionSelected(true);
-                } else if (value.type == 'Peliculas') {
-                  onOptionSelected(false);
-                } else if (value.type == 'Caricaturas') {}
+                if (value == OptionContenidoImpl.Anime) {
+                  widget.onOptionSelected(true);
+                } else if (value == OptionContenidoImpl.Peliculas) {
+                  widget.onOptionSelected(false);
+                } else if (value == OptionContenidoImpl.Caricaturas) {}
               }
             },
             dropdownMenuEntries:
-                OptionContenidoImplList.contenidolist
+                OptionContenidoImpl.values
+                    .where(
+                      (option) => option != OptionContenidoImpl.contenidolist,
+                    )
                     .map(
-                      (menu) => DropdownMenuEntry<OptionContenidoImpl>(
-                        value: menu,
-                        label: menu.type,
-                        leadingIcon: Icon(menu.icon, color: colors),
-                      ),
+                      (option) =>
+                          DropdownMenuEntry(value: option, label: option.name),
                     )
                     .toList(),
             trailingIcon: Icon(Icons.arrow_drop_down),

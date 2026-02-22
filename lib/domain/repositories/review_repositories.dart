@@ -1,9 +1,9 @@
 import 'package:critijoy_note/domain/entities/review.dart';
-import 'package:flutter/material.dart';
 
 abstract class ReviewRepository {
-  Future<void> addReview(Review review);
-  Future<List<Review>> getReviewsByType(String type);
+  Future<List<Review>> getReviews(String contentType);
+  Future<void> saveReview(Review review);
   Future<void> deleteReview(String id);
-  Future<void> updateReview(Review review);
+  Future<void> getAnalitics();
+  Future<void> syncgReviews();
 }

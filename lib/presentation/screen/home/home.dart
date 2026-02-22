@@ -1,6 +1,4 @@
-import 'package:critijoy_note/config/theme/app_theme.dart';
-import 'package:critijoy_note/data/models/review_model.dart';
-import 'package:critijoy_note/presentation/providers/theme_provider.dart';
+import 'package:critijoy_note/Infraestructure/models/review_model.dart';
 import 'package:critijoy_note/presentation/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:critijoy_note/presentation/widgets/appbar_menu.dart';
