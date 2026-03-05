@@ -14,10 +14,7 @@ class AddReview extends StatelessWidget {
           style: TextStyle(fontFamily: 'PoetsenOne', fontSize: 22),
         ),
       ),
-      body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-        child: FormAdd(onOptionSelected: (bool anime) {}),
-      ),
+      body: FormAdd(onOptionSelected: (bool anime) {}),
     );
   }
 }

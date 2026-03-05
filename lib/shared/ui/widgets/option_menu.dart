@@ -11,30 +11,21 @@ class OptionMenu extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDarkMode = ref.watch(isDarkModeProvider);
-    return SizedBox(
-      child: Expanded(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            Icon(Icons.grid_view_outlined, size: 30),
-            DropDownButton(
-              onOptionSelected: onOptionSelected,
-              icon: Icons.menu,
-            ),
-            IconButton(
-              onPressed: () {
-                ref.read(isDarkModeProvider.notifier).update((state) => !state);
-              },
-              icon: Icon(
-                isDarkMode
-                    ? Icons.dark_mode_outlined
-                    : Icons.light_mode_outlined,
-                size: 30,
-              ),
-            ),
-          ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Icon(Icons.grid_view_outlined, size: 30),
+        DropDownButton(onOptionSelected: onOptionSelected, icon: Icons.menu),
+        IconButton(
+          onPressed: () {
+            ref.read(isDarkModeProvider.notifier).update((state) => !state);
+          },
+          icon: Icon(
+            isDarkMode ? Icons.dark_mode_outlined : Icons.light_mode_outlined,
+            size: 30,
+          ),
         ),
-      ),
+      ],
     );
   }
 }

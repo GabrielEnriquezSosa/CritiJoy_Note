@@ -12,26 +12,26 @@ class FormAdd extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Form(
-      child: Column(
-        children: [
-          InputFormField(
-            labelText: 'Titulo Anime/Serie:',
-            maxLength: 25,
-            keyboardType: TextInputType.text,
-            labelfont: 20,
-          ),
-          SizedBox(height: 10),
-          InputFormField(
-            labelText: 'Sipnosis:',
-            maxLength: 350,
-            keyboardType: TextInputType.multiline,
-            labelfont: 20,
-          ),
-          SizedBox(height: 10),
-          SizedBox(
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        child: Column(
+          children: [
+            InputFormField(
+              labelText: 'Titulo Anime/Serie:',
+              maxLength: 25,
+              keyboardType: TextInputType.text,
+              labelfont: 20,
+            ),
+            SizedBox(height: 10),
+            InputFormField(
+              labelText: 'Sipnosis:',
+              maxLength: 350,
+              keyboardType: TextInputType.multiline,
+              labelfont: 20,
+            ),
+            SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: InputFormField(
@@ -41,7 +41,7 @@ class FormAdd extends StatelessWidget {
                     labelfont: 15,
                   ),
                 ),
-                SizedBox(width: 10, height: 60),
+                SizedBox(width: 10),
                 Expanded(
                   child: InputFormField(
                     labelText: 'Plataforma:',
@@ -53,12 +53,9 @@ class FormAdd extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          SizedBox(height: 10),
-          SizedBox(
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: InputFormField(
@@ -68,8 +65,7 @@ class FormAdd extends StatelessWidget {
                     labelfont: 15,
                   ),
                 ),
-                SizedBox(width: 10, height: 60),
-
+                SizedBox(width: 10),
                 Expanded(
                   child: InputFormField(
                     labelText: 'Temporada/s:',
@@ -80,12 +76,9 @@ class FormAdd extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          SizedBox(height: 10),
-          SizedBox(
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            SizedBox(height: 10),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: InputFormField(
@@ -95,7 +88,7 @@ class FormAdd extends StatelessWidget {
                     labelfont: 15,
                   ),
                 ),
-                SizedBox(width: 15, height: 60),
+                SizedBox(width: 15),
                 Expanded(
                   child: InputFormField(
                     labelText: 'Duración de Capitulos:',
@@ -106,53 +99,47 @@ class FormAdd extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          SizedBox(height: 15),
-          Align(
-            alignment: Alignment.center,
-            child: SizedBox(
-              child: Expanded(
-                child: DropDownButton(
-                  onOptionSelected: onOptionSelected,
-                  icon: Icons.menu,
-                ),
+            SizedBox(height: 15),
+            Align(
+              alignment: Alignment.center,
+              child: DropDownButton(
+                onOptionSelected: onOptionSelected,
+                icon: Icons.menu,
               ),
             ),
-          ),
-          SizedBox(height: 15),
-          Expanded(
-            child: ImageAnime(
+            SizedBox(height: 15),
+            ImageAnime(
               imagePath: 'assets/images/anime.png',
               borderRadius: 10,
               width: 200,
+              height: 200,
             ),
-          ),
-          SizedBox(height: 15),
-          SizedBox(
-            width: 342,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: FilledButton(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(blue),
-                      shape: WidgetStatePropertyAll(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+            SizedBox(height: 15),
+            SizedBox(
+              width: double.infinity,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: FilledButton(
+                      onPressed: () {},
+                      style: ButtonStyle(
+                        backgroundColor: WidgetStatePropertyAll(blue),
+                        shape: WidgetStatePropertyAll(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
                         ),
                       ),
-                    ),
-                    child: Text(
-                      'Agregar Imagen',
-                      style: TextStyle(fontSize: 15),
+                      child: Text(
+                        'Agregar Imagen',
+                        style: TextStyle(fontSize: 15),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(width: 10),
-                Expanded(
-                  child: Expanded(
+                  SizedBox(width: 10),
+                  Expanded(
                     child: FilledButton(
                       onPressed: () {},
                       style: ButtonStyle(
@@ -166,17 +153,16 @@ class FormAdd extends StatelessWidget {
                       child: Text(
                         'Quitar Imagen',
                         style: TextStyle(color: Colors.black, fontSize: 15),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: 15),
-          Expanded(
-            child: SizedBox(
-              width: 342,
+            SizedBox(height: 15),
+            SizedBox(
+              width: double.infinity,
               height: 44,
               child: FilledButton(
                 onPressed: () {},
@@ -191,9 +177,9 @@ class FormAdd extends StatelessWidget {
                 child: Text('Agregar', style: TextStyle(fontSize: 20)),
               ),
             ),
-          ),
-          SizedBox(height: 15),
-        ],
+            SizedBox(height: 15),
+          ],
+        ),
       ),
     );
   }
