@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 class ImageAnime extends StatelessWidget {
@@ -24,7 +25,13 @@ class ImageAnime extends StatelessWidget {
       decoration: BoxDecoration(
         color: color,
         borderRadius: BorderRadius.circular(borderRadius),
-        image: DecorationImage(image: AssetImage(imagePath), fit: BoxFit.cover),
+        image: DecorationImage(
+          image:
+              imagePath.startsWith('assets/')
+                  ? AssetImage(imagePath) as ImageProvider
+                  : FileImage(File(imagePath)),
+          fit: BoxFit.cover,
+        ),
         border: Border.all(
           width: 2,
           color: Colors.grey,
@@ -35,4 +42,3 @@ class ImageAnime extends StatelessWidget {
     );
   }
 }
-// This widget displays an image from the assets folder with specified dimensions and fit.

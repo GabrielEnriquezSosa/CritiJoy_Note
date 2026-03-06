@@ -1,34 +1,55 @@
-import 'package:critijoy_note/shared/core/theme/app_theme.dart';
+import 'package:critijoy_note/shared/core/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AppBarMenu extends PreferredSize implements PreferredSizeWidget {
+class AppBarMenu extends ConsumerWidget implements PreferredSizeWidget {
   const AppBarMenu({
     super.key,
-    required super.preferredSize,
-    required super.child,
+    required this.preferredSize,
+    required this.child,
   });
 
   @override
-  Widget build(BuildContext context) {
+  final Size preferredSize;
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = ref.watch(isDarkModeProvider);
+
     return AppBar(
-      backgroundColor: blue,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
       centerTitle: true,
-      title: Text('CritiJoy_Note'),
+      title: Text(
+        'Reseñas',
+        style: TextStyle(
+          color: isDarkMode ? Colors.white : Colors.black,
+          fontSize: 22,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
       actions: [
-        Row(
-          children: [
-            IconButton(
-              onPressed: () {
-                context.push('/addreview');
-              },
-              icon: Icon(Icons.add_circle_outline),
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: Container(
+            decoration: BoxDecoration(
+              color:
+                  isDarkMode ? const Color(0xFFFFE0B2) : Colors.blue.shade200,
+              shape: BoxShape.circle,
             ),
-            IconButton(onPressed: () {}, icon: Icon(Icons.search)),
-          ],
+            child: IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.search,
+                color: isDarkMode ? Colors.black87 : Colors.white,
+              ),
+            ),
+          ),
         ),
       ],
+      iconTheme: IconThemeData(color: isDarkMode ? Colors.white : Colors.black),
     );
   }
 }
-// This widget creates a custom AppBar with a title, action buttons for adding and searching, and a leading button for navigation, all styled with a blue background and black icons.

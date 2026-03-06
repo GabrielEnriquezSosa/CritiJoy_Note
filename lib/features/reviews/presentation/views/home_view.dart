@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:critijoy_note/shared/ui/widgets/appbar_menu.dart';
 import 'package:critijoy_note/shared/ui/widgets/listview_content.dart';
 import 'package:critijoy_note/shared/ui/widgets/option_menu.dart';
+import 'package:critijoy_note/shared/core/theme/theme_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -14,7 +16,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  String _selectedContentType = 'Anime'; // Default or based on dropdown
+  String _selectedContentType = 'Todo'; // Default or based on dropdown
 
   @override
   void initState() {
@@ -29,11 +31,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget build(BuildContext context) {
     final scaffoldKey = GlobalKey<ScaffoldState>();
     final reviewsAsync = ref.watch(reviewsProvider);
+    final isDarkMode = ref.watch(isDarkModeProvider);
 
     return Scaffold(
       key: scaffoldKey,
+      backgroundColor: isDarkMode ? const Color(0xFF141414) : null,
       appBar: AppBarMenu(
-        preferredSize: const Size(395, 60),
+        preferredSize: const Size(double.infinity, 60),
         child: Container(),
       ),
       body: Column(
@@ -51,7 +55,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: reviewsAsync.when(
               data: (reviews) {
                 if (reviews.isEmpty) {
-                  return const Center(child: Text('No hay reseñas guardadas.'));
+                  return Center(
+                    child: Text(
+                      'No hay reseñas guardadas.',
+                      style: TextStyle(
+                        color: isDarkMode ? Colors.white : Colors.black,
+                      ),
+                    ),
+                  );
                 }
                 return ListView.builder(
                   itemCount: reviews.length,
@@ -67,6 +78,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ],
       ),
       drawer: NavigationDrawerList(scaffoldKey: scaffoldKey),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          context.push('/addreview');
+        },
+        backgroundColor: Colors.blueAccent,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add, color: Colors.white, size: 30),
+      ),
     );
   }
 }

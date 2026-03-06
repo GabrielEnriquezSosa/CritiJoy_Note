@@ -7,7 +7,7 @@ class UpdateReviewUsecase {
 
   Future<void> execute(Review review) async {
     if (review.id.isEmpty) {
-      throw Exception('Review id is empty');
+      throw Exception('Reseña no encontrada');
     }
 
     final updateReview = review.copyWith(updateAt: DateTime.now());

@@ -1,4 +1,3 @@
-import 'package:critijoy_note/features/reviews/data/services/local_datasource.dart';
 import 'package:critijoy_note/features/reviews/domain/models/review.dart';
 import 'package:critijoy_note/shared/ui/widgets/dropdowbutton.dart';
 
@@ -73,6 +72,3 @@ class ReviewModel extends Review {
     'usuarioId': userId,
   };
 }
-
-final List<ReviewModel> reviews =
-    localDataSource.map((item) => ReviewModel.fromjson(item)).toList();

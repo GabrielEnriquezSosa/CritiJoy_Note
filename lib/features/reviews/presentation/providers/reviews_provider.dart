@@ -36,8 +36,9 @@ class ReviewsNotifier extends AsyncNotifier<List<Review>> {
 
       final currentList = state.valueOrNull ?? [];
 
-      // Only append if we are currently viewing the same category
-      if (_currentContentType == review.contentType.name) {
+      // Only append if we are currently viewing the same category or 'Todo'
+      if (_currentContentType == review.contentType.name ||
+          _currentContentType == 'Todo') {
         state = AsyncValue.data([...currentList, review]);
       }
     } catch (e, st) {
@@ -52,7 +53,8 @@ class ReviewsNotifier extends AsyncNotifier<List<Review>> {
 
       final currentList = state.valueOrNull ?? [];
 
-      if (_currentContentType == review.contentType.name) {
+      if (_currentContentType == review.contentType.name ||
+          _currentContentType == 'Todo') {
         final updatedList =
             currentList.map((r) => r.id == review.id ? review : r).toList();
         state = AsyncValue.data(updatedList);

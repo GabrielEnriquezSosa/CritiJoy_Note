@@ -1,11 +1,7 @@
-import 'package:critijoy_note/features/reviews/presentation/providers/reviews_provider.dart';
 import 'package:critijoy_note/shared/core/theme/theme_provider.dart';
-import 'package:flutter/material.dart';
-import 'package:critijoy_note/shared/ui/widgets/button.dart';
-import 'package:critijoy_note/shared/ui/widgets/description_anime.dart';
 import 'package:critijoy_note/shared/ui/widgets/image_anime.dart';
-import 'package:critijoy_note/shared/ui/widgets/title_anime.dart';
 import 'package:critijoy_note/features/reviews/domain/models/review.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,60 +11,83 @@ class ListViewContent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final colorCard = ref.watch(colorCardProvider).getTheme().cardTheme.color;
+    final isDarkMode = ref.watch(isDarkModeProvider);
+
     return InkWell(
-      onLongPress: () {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return Dialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Button(
-                      title: 'Editar review',
-                      onPressed: () {
-                        Navigator.pop(context);
-                        context.push('/editreview');
-                      },
-                    ),
-                    const SizedBox(width: 20),
-                    Button(
-                      title: 'Eliminar review',
-                      onPressed: () {
-                        ref
-                            .read(reviewsProvider.notifier)
-                            .deleteReview(typeContenido);
-                        Navigator.pop(context);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+      onTap: () {
+        context.push('/reviewdetails', extra: typeContenido);
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4.5),
-        color: colorCard,
+        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        decoration: BoxDecoration(
+          color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
+          borderRadius: BorderRadius.circular(16.0),
+          boxShadow:
+              isDarkMode
+                  ? [] // Flat design in dark mode matching mockup
+                  : [
+                    BoxShadow(
+                      color: Colors.grey.withValues(alpha: 0.1),
+                      spreadRadius: 1,
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+        ),
+        padding: const EdgeInsets.all(12.0),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             ImageAnime(
               imagePath: typeContenido.image,
-              width: 100,
-              height: 100,
-              borderRadius: 0,
+              width: 80,
+              height: 80,
+              borderRadius: 12.0,
             ),
-            const SizedBox(width: 10),
-            TitleContent(title: typeContenido.title),
-            const SizedBox(height: 5),
-            DescriptionAnime(description: typeContenido.reviewText),
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    typeContenido.title,
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: isDarkMode ? Colors.white : Colors.black87,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    typeContenido.contentType.name,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color:
+                          isDarkMode
+                              ? Colors.grey[400]
+                              : Colors.blueGrey.shade400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 12),
+            Row(
+              children: [
+                const Icon(Icons.star, color: Colors.amber, size: 20),
+                const SizedBox(width: 4),
+                Text(
+                  typeContenido.rating.toStringAsFixed(1),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: isDarkMode ? Colors.white : Colors.black87,
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),

@@ -22,8 +22,10 @@ class ReviewRepositoryImpl extends ReviewRepository {
 
   @override
   Future<List<Review>> getReviews(String contentType) async {
-    final query = _db.select(_db.reviews)
-      ..where((t) => t.contentType.equals(contentType));
+    final query = _db.select(_db.reviews);
+    if (contentType != 'Todo') {
+      query.where((t) => t.contentType.equals(contentType));
+    }
     final result = await query.get();
 
     return result.map((row) => _mapReviewEntryToReview(row)).toList();
