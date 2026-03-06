@@ -1,5 +1,4 @@
 import 'package:critijoy_note/shared/core/theme/app_theme.dart';
-import 'package:critijoy_note/features/reviews/domain/models/review.dart';
 import 'package:flutter/material.dart';
 
 enum OptionContenidoImpl {
@@ -21,47 +20,72 @@ class DropDownButton extends StatefulWidget {
     super.key,
     required this.onOptionSelected,
     required this.icon,
+    this.initialValue = 'Anime',
   });
 
-  final void Function(bool anime) onOptionSelected;
+  final void Function(String category) onOptionSelected;
   final IconData icon;
+  final String initialValue;
 
   @override
   State<DropDownButton> createState() => _DropDownButtonState();
 }
 
 class _DropDownButtonState extends State<DropDownButton> {
-  Review? review;
+  late TextEditingController _controller;
+  late OptionContenidoImpl _selectedOption;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedOption = OptionContenidoImpl.values.firstWhere(
+      (e) => e.name == widget.initialValue,
+      orElse: () => OptionContenidoImpl.Anime,
+    );
+    _controller = TextEditingController(text: _selectedOption.name);
+  }
+
+  @override
+  void didUpdateWidget(DropDownButton oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue != oldWidget.initialValue) {
+      _selectedOption = OptionContenidoImpl.values.firstWhere(
+        (e) => e.name == widget.initialValue,
+        orElse: () => OptionContenidoImpl.Anime,
+      );
+      _controller.text = _selectedOption.name;
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final colors = AppTheme().getTheme().textSelectionTheme.selectionColor;
     return Container(
       width: 200,
       decoration: BoxDecoration(
         color: blue,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
         border: Border.all(width: 3, color: lightgrey),
       ),
       child: Column(
         children: [
-          DropdownMenu(
-            hintText:
-                review?.contentType.toString() ??
-                OptionContenidoImpl.Anime.toString(),
-            textStyle: TextStyle(
+          DropdownMenu<OptionContenidoImpl>(
+            controller: _controller,
+            textStyle: const TextStyle(
               decoration: TextDecoration.none,
-              decorationColor: colors,
+              decorationColor: Colors.white,
               fontStyle: FontStyle.normal,
-              color: colors,
+              color: Colors.white,
             ),
             onSelected: (OptionContenidoImpl? value) {
               if (value != null) {
-                if (value == OptionContenidoImpl.Anime) {
-                  widget.onOptionSelected(true);
-                } else if (value == OptionContenidoImpl.Peliculas) {
-                  widget.onOptionSelected(false);
-                } else if (value == OptionContenidoImpl.Caricaturas) {}
+                _controller.text = value.name;
+                widget.onOptionSelected(value.name);
               }
             },
             dropdownMenuEntries:
@@ -74,8 +98,11 @@ class _DropDownButtonState extends State<DropDownButton> {
                           DropdownMenuEntry(value: option, label: option.name),
                     )
                     .toList(),
-            trailingIcon: Icon(Icons.arrow_drop_down),
-            menuStyle: MenuStyle(
+            trailingIcon: const Icon(
+              Icons.arrow_drop_down,
+              color: Colors.white,
+            ),
+            menuStyle: const MenuStyle(
               padding: WidgetStatePropertyAll(EdgeInsets.all(0)),
             ),
           ),

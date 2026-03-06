@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class OptionMenu extends ConsumerWidget {
-  final void Function(bool anime) onOptionSelected;
+  final String selectedType;
+  final void Function(String contentType) onOptionSelected;
 
-  const OptionMenu({super.key, required this.onOptionSelected});
+  const OptionMenu({
+    super.key,
+    required this.selectedType,
+    required this.onOptionSelected,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,7 +20,13 @@ class OptionMenu extends ConsumerWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         Icon(Icons.grid_view_outlined, size: 30),
-        DropDownButton(onOptionSelected: onOptionSelected, icon: Icons.menu),
+        DropDownButton(
+          initialValue: selectedType,
+          onOptionSelected: (String category) {
+            onOptionSelected(category);
+          },
+          icon: Icons.menu,
+        ),
         IconButton(
           onPressed: () {
             ref.read(isDarkModeProvider.notifier).update((state) => !state);

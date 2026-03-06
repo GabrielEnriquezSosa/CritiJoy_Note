@@ -9,6 +9,8 @@ final reviewsProvider = AsyncNotifierProvider<ReviewsNotifier, List<Review>>(
 );
 
 class ReviewsNotifier extends AsyncNotifier<List<Review>> {
+  String? _currentContentType;
+
   @override
   Future<List<Review>> build() async {
     // Default load, can be skipped or empty list initially
@@ -16,6 +18,7 @@ class ReviewsNotifier extends AsyncNotifier<List<Review>> {
   }
 
   Future<void> loadReviews(String contentType) async {
+    _currentContentType = contentType;
     state = const AsyncValue.loading();
     try {
       final getReviews = ref.read(getReviewsUsecaseProvider);
@@ -30,14 +33,14 @@ class ReviewsNotifier extends AsyncNotifier<List<Review>> {
     try {
       final addReviewUsecase = ref.read(addReviewUsecaseProvider);
       await addReviewUsecase.execute(review);
-      // If we are currently showing a list of reviews, we might want to refresh it or append to current state
+
       final currentList = state.valueOrNull ?? [];
 
-      // Let's pretend we refresh the list from the data source, or just add it locally
-      // For simplicity, we just add locally if successful
-      state = AsyncValue.data([...currentList, review]);
+      // Only append if we are currently viewing the same category
+      if (_currentContentType == review.contentType.name) {
+        state = AsyncValue.data([...currentList, review]);
+      }
     } catch (e, st) {
-      // Handle error, maybe rethrow or update state
       state = AsyncValue.error(e, st);
     }
   }
@@ -48,9 +51,17 @@ class ReviewsNotifier extends AsyncNotifier<List<Review>> {
       await updateReviewUsecase.execute(review);
 
       final currentList = state.valueOrNull ?? [];
-      final updatedList =
-          currentList.map((r) => r.id == review.id ? review : r).toList();
-      state = AsyncValue.data(updatedList);
+
+      if (_currentContentType == review.contentType.name) {
+        final updatedList =
+            currentList.map((r) => r.id == review.id ? review : r).toList();
+        state = AsyncValue.data(updatedList);
+      } else {
+        // If the category was changed during edit, remove it from the current view list
+        final updatedList =
+            currentList.where((r) => r.id != review.id).toList();
+        state = AsyncValue.data(updatedList);
+      }
     } catch (e, st) {
       state = AsyncValue.error(e, st);
     }

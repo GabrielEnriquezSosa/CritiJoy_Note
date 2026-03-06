@@ -1,22 +1,35 @@
 import 'package:critijoy_note/shared/ui/widgets/form_anime.dart';
 import 'package:flutter/material.dart';
 
-class EditReview extends StatelessWidget {
+class EditReview extends StatefulWidget {
   const EditReview({super.key});
+
+  @override
+  State<EditReview> createState() => _EditReviewState();
+}
+
+class _EditReviewState extends State<EditReview> {
+  String _category = 'Anime';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          'Editar Nota - Anime',
+          'Editar Nota - $_category',
           textAlign: TextAlign.center,
-          style: TextStyle(fontFamily: 'PoetsenOne', fontSize: 22),
+          style: const TextStyle(fontFamily: 'PoetsenOne', fontSize: 22),
         ),
       ),
       body: Container(
-        margin: EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-        child: FormAdd(onOptionSelected: (bool anime) {}),
+        margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+        child: FormAdd(
+          onOptionSelected: (category) {
+            setState(() {
+              _category = category;
+            });
+          },
+        ),
       ),
     );
   }

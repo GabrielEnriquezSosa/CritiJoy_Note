@@ -1,5 +1,6 @@
 import 'package:critijoy_note/features/reviews/data/services/local_datasource.dart';
 import 'package:critijoy_note/features/reviews/domain/models/review.dart';
+import 'package:critijoy_note/shared/ui/widgets/dropdowbutton.dart';
 
 class ReviewModel extends Review {
   ReviewModel({
@@ -48,14 +49,10 @@ class ReviewModel extends Review {
   }
 
   static Enum _parseContentType(dynamic value) {
-    // Implementa la conversión según tu enum ContentType
-    // Por ahora retorna un enum genérico basado en el string
     if (value is Enum) return value;
-    return _ContentTypeEnum.values.firstWhere(
-      (e) =>
-          e.toString().split('.').last.toLowerCase() ==
-          value.toString().toLowerCase(),
-      orElse: () => _ContentTypeEnum.anime,
+    return OptionContenidoImpl.values.firstWhere(
+      (e) => e.name.toLowerCase() == value.toString().toLowerCase(),
+      orElse: () => OptionContenidoImpl.Anime,
     );
   }
 
@@ -76,8 +73,6 @@ class ReviewModel extends Review {
     'usuarioId': userId,
   };
 }
-
-enum _ContentTypeEnum { anime, manga, book, movie, tvshow }
 
 final List<ReviewModel> reviews =
     localDataSource.map((item) => ReviewModel.fromjson(item)).toList();

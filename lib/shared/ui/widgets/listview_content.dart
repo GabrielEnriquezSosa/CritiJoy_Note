@@ -1,3 +1,4 @@
+import 'package:critijoy_note/features/reviews/presentation/providers/reviews_provider.dart';
 import 'package:critijoy_note/shared/core/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:critijoy_note/shared/ui/widgets/button.dart';
@@ -40,6 +41,9 @@ class ListViewContent extends ConsumerWidget {
                     Button(
                       title: 'Eliminar review',
                       onPressed: () {
+                        ref
+                            .read(reviewsProvider.notifier)
+                            .deleteReview(typeContenido);
                         Navigator.pop(context);
                       },
                     ),

@@ -7,6 +7,8 @@ class InputFormField extends StatelessWidget {
   final double? widht;
   final double labelfont;
   final TextInputType keyboardType;
+  final TextEditingController? controller;
+
   const InputFormField({
     super.key,
     required this.labelText,
@@ -14,6 +16,7 @@ class InputFormField extends StatelessWidget {
     required this.keyboardType,
     this.widht,
     required this.labelfont,
+    this.controller,
   });
 
   @override
@@ -34,6 +37,7 @@ class InputFormField extends StatelessWidget {
             ),
           ),
           child: TextFormField(
+            controller: controller,
             keyboardType: keyboardType,
             maxLines: keyboardType == TextInputType.multiline ? 5 : 1,
             maxLength: maxLength,
