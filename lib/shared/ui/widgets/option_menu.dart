@@ -30,6 +30,7 @@ class OptionMenu extends ConsumerWidget {
     final isDarkMode = ref.watch(isDarkModeProvider);
 
     return SingleChildScrollView(
+      key: const PageStorageKey<String>('option_menu_scroll'),
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(

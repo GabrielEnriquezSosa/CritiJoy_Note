@@ -280,8 +280,10 @@ class _FormAddState extends ConsumerState<FormAdd> {
                   width: 1.0,
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              child: Wrap(
+                alignment: WrapAlignment.spaceBetween,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                runSpacing: 10,
                 children: [
                   Text(
                     'Tu Calificación',

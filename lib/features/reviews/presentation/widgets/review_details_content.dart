@@ -54,8 +54,8 @@ class ReviewDetailsContent extends ConsumerWidget {
           const SizedBox(height: 8),
 
           // Rating Row
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.end,
             children: [
               Text(
                 typeContenido.rating.toStringAsFixed(1),

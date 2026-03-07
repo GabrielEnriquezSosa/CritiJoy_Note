@@ -16,12 +16,11 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
-  String _selectedContentType = 'Todo'; // Default or based on dropdown
+  String _selectedContentType = 'Todo';
 
   @override
   void initState() {
     super.initState();
-    // Load initial reviews
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(reviewsProvider.notifier).loadReviews(_selectedContentType);
     });
