@@ -170,7 +170,7 @@ class ConfigView extends ConsumerWidget {
                 onChanged: (value) {
                   ref.read(isDarkModeProvider.notifier).toggleTheme(value);
                 },
-                activeColor: accentColor,
+                activeThumbColor: accentColor,
               ),
             ),
             const SizedBox(height: 8),

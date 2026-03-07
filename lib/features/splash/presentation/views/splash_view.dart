@@ -15,10 +15,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+  String _welcomeName = 'Usuario';
+  bool _hasSession = false;
 
   @override
   void initState() {
     super.initState();
+    _loadSessionName();
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4),
@@ -32,14 +35,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     _controller.addStatusListener((status) async {
       if (status == AnimationStatus.completed && mounted) {
-        // Try to restore the previous session from SharedPreferences
         final repo = ref.read(authRepositoryProvider);
         final user = await repo.restoreSession();
-
         if (!mounted) return;
-
         if (user != null) {
-          // Restore state into Riverpod notifier
           ref.read(authStateProvider.notifier).setUser(user);
           context.go('/home');
         } else {
@@ -49,6 +48,18 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     });
 
     _controller.forward();
+  }
+
+  /// Loads the user name early so the welcome text is correct during animation.
+  Future<void> _loadSessionName() async {
+    final repo = ref.read(authRepositoryProvider);
+    final user = await repo.restoreSession();
+    if (mounted && user != null) {
+      setState(() {
+        _welcomeName = user.name;
+        _hasSession = true;
+      });
+    }
   }
 
   @override
@@ -170,12 +181,18 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               const SizedBox(height: 8),
 
               // --- Welcome subtitle ---
-              Text(
-                '¡Bienvenido, Yazmin!',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: subtitleColor,
-                  letterSpacing: 0.5,
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Text(
+                  textAlign: TextAlign.center,
+                  _hasSession
+                      ? '¡Hola $_welcomeName!\n ¿Qué calificamos hoy?'
+                      : '¡Bienvenido, $_welcomeName!',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: subtitleColor,
+                    letterSpacing: 0.5,
+                  ),
                 ),
               ),
 
