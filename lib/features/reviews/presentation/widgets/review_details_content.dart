@@ -89,7 +89,7 @@ class ReviewDetailsContent extends ConsumerWidget {
           Divider(
             thickness: 1,
             color:
-                isDarkMode ? const Color(0xFF282828) : const Color(0xFFBBE1FA),
+                isDarkMode ? const Color(0xFF1F2937) : const Color(0xFFBBE1FA),
           ),
           const SizedBox(height: 16),
 
@@ -160,7 +160,7 @@ class ReviewDetailsContent extends ConsumerWidget {
           Divider(
             thickness: 1,
             color:
-                isDarkMode ? const Color(0xFF282828) : const Color(0xFFBBE1FA),
+                isDarkMode ? const Color(0xFF1F2937) : const Color(0xFFBBE1FA),
           ),
           const SizedBox(height: 24),
 
@@ -186,7 +186,7 @@ class ReviewDetailsContent extends ConsumerWidget {
           Divider(
             thickness: 1,
             color:
-                isDarkMode ? const Color(0xFF282828) : const Color(0xFFBBE1FA),
+                isDarkMode ? const Color(0xFF1F2937) : const Color(0xFFBBE1FA),
           ),
           const SizedBox(height: 24),
 
@@ -206,7 +206,7 @@ class ReviewDetailsContent extends ConsumerWidget {
                       isDarkMode ? Colors.white : const Color(0xFF0088CC),
                   borderColor:
                       isDarkMode
-                          ? const Color(0xFF282828)
+                          ? const Color(0xFF1F2937)
                           : const Color(0xFF0088CC),
                 ),
               ),

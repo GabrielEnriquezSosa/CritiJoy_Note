@@ -1,8 +1,8 @@
-import 'package:critijoy_note/features/reviews/domain/use_cases/add_review_usecase.dart';
-import 'package:critijoy_note/features/reviews/domain/use_cases/delete_review_usecase.dart';
-import 'package:critijoy_note/features/reviews/domain/use_cases/get_reviews_usecase.dart';
-import 'package:critijoy_note/features/reviews/domain/use_cases/sync_reviews_usecase.dart';
-import 'package:critijoy_note/features/reviews/domain/use_cases/update_review_usecase.dart';
+import 'package:critijoy_note/features/reviews/domain/usecases/add_review_usecase.dart';
+import 'package:critijoy_note/features/reviews/domain/usecases/delete_review_usecase.dart';
+import 'package:critijoy_note/features/reviews/domain/usecases/get_reviews_usecase.dart';
+import 'package:critijoy_note/features/reviews/domain/usecases/sync_reviews_usecase.dart';
+import 'package:critijoy_note/features/reviews/domain/usecases/update_review_usecase.dart';
 import 'package:critijoy_note/features/reviews/presentation/providers/review_repository_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

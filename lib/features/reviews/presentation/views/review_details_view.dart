@@ -13,7 +13,7 @@ class ReviewDetailsView extends ConsumerWidget {
     final isDarkMode = ref.watch(isDarkModeProvider);
 
     return Scaffold(
-      backgroundColor: isDarkMode ? const Color(0xFF141414) : Colors.white,
+      backgroundColor: isDarkMode ? const Color(0xFF0F1522) : Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,

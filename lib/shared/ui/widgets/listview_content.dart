@@ -1,5 +1,6 @@
+import 'dart:io';
+
 import 'package:critijoy_note/shared/core/theme/theme_provider.dart';
-import 'package:critijoy_note/shared/ui/widgets/image_anime.dart';
 import 'package:critijoy_note/features/reviews/domain/models/review.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,6 +13,9 @@ class ListViewContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final isDarkMode = ref.watch(isDarkModeProvider);
+    final cardColor = isDarkMode ? const Color(0xFF111827) : Colors.white;
+    final textColor = isDarkMode ? Colors.white : Colors.black87;
+    final subtitleColor = isDarkMode ? Colors.white54 : Colors.grey.shade600;
 
     return InkWell(
       onTap: () {
@@ -19,74 +23,124 @@ class ListViewContent extends ConsumerWidget {
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
-          borderRadius: BorderRadius.circular(16.0),
+          color: cardColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: isDarkMode ? const Color(0xFF1F2937) : Colors.grey.shade200,
+            width: 1,
+          ),
           boxShadow:
               isDarkMode
-                  ? [] // Flat design in dark mode matching mockup
+                  ? []
                   : [
                     BoxShadow(
-                      color: Colors.grey.withValues(alpha: 0.1),
-                      spreadRadius: 1,
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 10,
                       offset: const Offset(0, 4),
                     ),
                   ],
         ),
-        padding: const EdgeInsets.all(12.0),
         child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ImageAnime(
-              imagePath: typeContenido.image,
-              width: 80,
-              height: 80,
-              borderRadius: 12.0,
-            ),
-            const SizedBox(width: 16),
+            // Left side Content
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Top row: Tag and Rating
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: const Color(
+                              0xFF1A56DB,
+                            ).withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            typeContenido.contentType.name.toUpperCase(),
+                            style: const TextStyle(
+                              color: Color(0xFF3B82F6), // Blue text
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Icon(Icons.star, color: Colors.amber, size: 14),
+                      const SizedBox(width: 4),
+                      Text(
+                        typeContenido.rating.toStringAsFixed(1),
+                        style: const TextStyle(
+                          color: Colors.amber,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Title
                   Text(
                     typeContenido.title,
                     style: TextStyle(
-                      fontSize: 18,
+                      color: textColor,
                       fontWeight: FontWeight.bold,
-                      color: isDarkMode ? Colors.white : Colors.black87,
+                      fontSize: 16,
                     ),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 6),
+
+                  // Excerpt
                   Text(
-                    typeContenido.contentType.name,
+                    typeContenido.reviewText.isNotEmpty
+                        ? typeContenido.reviewText
+                        : 'Sin reseña',
                     style: TextStyle(
-                      fontSize: 14,
-                      color:
-                          isDarkMode
-                              ? Colors.grey[400]
-                              : Colors.blueGrey.shade400,
+                      color: subtitleColor,
+                      fontSize: 13,
+                      height: 1.4,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 12),
-            Row(
-              children: [
-                const Icon(Icons.star, color: Colors.amber, size: 20),
-                const SizedBox(width: 4),
-                Text(
-                  typeContenido.rating.toStringAsFixed(1),
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: isDarkMode ? Colors.white : Colors.black87,
-                  ),
-                ),
-              ],
+            const SizedBox(width: 16),
+
+            // Right side Image
+            Container(
+              width: 100, // Slightly taller/wider to match layout
+              height: 140,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color:
+                    isDarkMode ? const Color(0xFF1F2937) : Colors.grey.shade200,
+              ),
+              clipBehavior: Clip.hardEdge,
+              child:
+                  typeContenido.image.isNotEmpty &&
+                          File(typeContenido.image).existsSync()
+                      ? Image.file(File(typeContenido.image), fit: BoxFit.cover)
+                      : Icon(
+                        Icons.image_not_supported,
+                        color: subtitleColor,
+                        size: 30,
+                      ),
             ),
           ],
         ),

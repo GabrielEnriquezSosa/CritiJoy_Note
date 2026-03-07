@@ -14,9 +14,5 @@ List appMenuItems = <MenuItems>[
   MenuItems(title: 'Autores', icon: Icons.group, link: '/autores'),
   MenuItems(title: 'Generos', icon: Icons.category, link: '/geners'),
   MenuItems(title: 'Analitica', icon: Icons.analytics, link: '/analytics'),
-  MenuItems(
-    title: 'Configuración',
-    icon: Icons.settings,
-    link: '/configuracion',
-  ),
+  MenuItems(title: 'Configuración', icon: Icons.settings, link: '/config'),
 ];

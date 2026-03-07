@@ -1,102 +1,252 @@
-import 'dart:math';
+import 'package:critijoy_note/features/auth/presentation/providers/auth_provider.dart';
+import 'package:critijoy_note/shared/core/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends ConsumerState<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    );
+
+    _animation = Tween<double>(begin: 0, end: 100).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    )..addListener(() {
+      setState(() {});
+    });
+
+    _controller.addStatusListener((status) async {
+      if (status == AnimationStatus.completed && mounted) {
+        // Try to restore the previous session from SharedPreferences
+        final repo = ref.read(authRepositoryProvider);
+        final user = await repo.restoreSession();
+
+        if (!mounted) return;
+
+        if (user != null) {
+          // Restore state into Riverpod notifier
+          ref.read(authStateProvider.notifier).setUser(user);
+          context.go('/home');
+        } else {
+          context.go('/signin');
+        }
+      }
+    });
+
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = ref.watch(isDarkModeProvider);
+    final progress = _animation.value;
+    final progressPercent = progress.toInt();
+
+    // Theme-aware colors
+    final backgroundColor =
+        isDarkMode ? const Color(0xFF1B2230) : const Color(0xFFF0F4F8);
+    final titleColor = isDarkMode ? Colors.white : const Color(0xFF1B2230);
+    final subtitleColor = isDarkMode ? Colors.grey[400] : Colors.grey[600];
+    final trackColor =
+        isDarkMode ? const Color(0xFF2D3748) : Colors.grey.shade300;
+    final labelColor = isDarkMode ? Colors.grey[500] : Colors.grey[600];
+    final borderColor =
+        isDarkMode
+            ? Colors.orange.shade800.withValues(alpha: 0.6)
+            : Colors.orange.shade400.withValues(alpha: 0.7);
+
     return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Center(
-              child: CustomPaint(
-                size: Size(390, 293),
-                painter: SquareAndHalfCirclePainter(),
-                child: SizedBox(
-                  width: 390,
-                  height: 293,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 10,
-                    children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundImage: AssetImage("assets/images/Logo.png"),
+      backgroundColor: backgroundColor,
+      body: SafeArea(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(flex: 2),
+
+              // --- Circular Avatar with Star Badge ---
+              SizedBox(
+                width: 160,
+                height: 160,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    // Outer ring
+                    Container(
+                      width: 160,
+                      height: 160,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: borderColor, width: 3),
                       ),
-                      Text(
-                        "Bienvenido a CritiJoy",
-                        style: TextStyle(
-                          fontSize: 35,
-                          fontWeight: FontWeight.bold,
+                      child: Padding(
+                        padding: const EdgeInsets.all(6),
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/images/Logo.png',
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                    // Star badge
+                    Positioned(
+                      top: 2,
+                      right: 2,
+                      child: Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                          color: Color(0xFF3B82F6),
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0xFF3B82F6).withValues(alpha: 0.4),
+                              blurRadius: 8,
+                              spreadRadius: 1,
+                            ),
+                          ],
+                        ),
+                        child: const Icon(
+                          Icons.star_rounded,
+                          color: Colors.white,
+                          size: 22,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(height: 120),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 38),
-                child: Text(
-                  "Que gusto Tenerte devuelta Yazmin",
-                  style: TextStyle(fontSize: 50, fontFamily: "Rancho"),
-                  textAlign: TextAlign.center,
+
+              const SizedBox(height: 30),
+
+              // --- App Title "CritiJoy" ---
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Criti',
+                      style: TextStyle(
+                        fontSize: 42,
+                        fontWeight: FontWeight.bold,
+                        color: titleColor,
+                        letterSpacing: 1,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'Joy',
+                      style: TextStyle(
+                        fontSize: 42,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF3B82F6),
+                        letterSpacing: 1,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(height: 120),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.white,
-        child: FilledButton(
-          onPressed: () {
-            context.push('/home');
-          },
-          style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all(Colors.blue),
-          ),
-          child: Text(
-            "Entrar",
-            style: TextStyle(color: Colors.white, fontSize: 25),
+
+              const SizedBox(height: 8),
+
+              // --- Welcome subtitle ---
+              Text(
+                '¡Bienvenido, Yazmin!',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: subtitleColor,
+                  letterSpacing: 0.5,
+                ),
+              ),
+
+              const SizedBox(height: 50),
+
+              // --- Loading Section ---
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
+                child: Column(
+                  children: [
+                    // Labels Row
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'INICIANDO EXPERIENCIA',
+                          style: TextStyle(
+                            color: labelColor,
+                            fontSize: 11,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                        Text(
+                          '$progressPercent%',
+                          style: TextStyle(
+                            color: Color(0xFF3B82F6),
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    // Progress Bar
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(6),
+                      child: Stack(
+                        children: [
+                          // Background track
+                          Container(
+                            height: 6,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: trackColor,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ),
+                          // Orange foreground fill
+                          FractionallySizedBox(
+                            widthFactor: progress / 100,
+                            child: Container(
+                              height: 6,
+                              decoration: BoxDecoration(
+                                color: Color(0xFF3B82F6),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              const Spacer(flex: 3),
+            ],
           ),
         ),
       ),
     );
   }
-}
-
-class SquareAndHalfCirclePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paintSquare = Paint()..color = Colors.blue;
-    final paintCircle = Paint()..color = Colors.blue;
-
-    canvas.drawRect(
-      Rect.fromLTWH(-size.width, 0, size.width * 3, size.height / 2),
-      paintSquare,
-    );
-    canvas.drawArc(
-      Rect.fromLTWH(-size.width / 4, 0, size.width * 1.5, size.height),
-      0,
-      pi,
-      true,
-      paintCircle,
-    );
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

@@ -10,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
+import 'package:critijoy_note/features/reviews/presentation/providers/genres_provider.dart';
 
 class FormAdd extends ConsumerStatefulWidget {
   final Review? review;
@@ -36,8 +37,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
   String _imagePath = ''; // default
   final ImagePicker _picker = ImagePicker();
 
-  // Example genres
-  final List<String> _availableGenres = ['Action', 'Comedy', 'Drama', 'Sci-Fi'];
+  // Genres
   final List<String> _selectedGenres = [];
 
   @override
@@ -64,11 +64,11 @@ class _FormAddState extends ConsumerState<FormAdd> {
               .where((e) => e.isNotEmpty)
               .toList();
       _selectedGenres.addAll(genres);
-      for (final g in genres) {
-        if (!_availableGenres.contains(g)) {
-          _availableGenres.add(g);
+      Future.microtask(() {
+        for (final g in genres) {
+          ref.read(genresProvider.notifier).addGenre(g);
         }
-      }
+      });
     }
   }
 
@@ -164,13 +164,13 @@ class _FormAddState extends ConsumerState<FormAdd> {
                 decoration: BoxDecoration(
                   color:
                       isDarkMode
-                          ? const Color(0xFF1E1E1E)
+                          ? const Color(0xFF111827)
                           : Colors.lightBlue.shade50.withOpacity(0.5),
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(
                     color:
                         isDarkMode
-                            ? const Color(0xFF282828)
+                            ? const Color(0xFF1F2937)
                             : Colors.lightBlue.shade200,
                     width: 2,
                     // Note: Flutter doesn't support dashed borders natively without a package, so setting solid for now.
@@ -191,7 +191,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
                             CircleAvatar(
                               backgroundColor:
                                   isDarkMode
-                                      ? const Color(0xFF282828)
+                                      ? const Color(0xFF1F2937)
                                       : Colors.white,
                               radius: 25,
                               child: const Icon(
@@ -242,12 +242,12 @@ class _FormAddState extends ConsumerState<FormAdd> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               decoration: BoxDecoration(
-                color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
+                color: isDarkMode ? const Color(0xFF111827) : Colors.white,
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(
                   color:
                       isDarkMode
-                          ? const Color(0xFF282828)
+                          ? const Color(0xFF1F2937)
                           : Colors.lightBlue.shade200,
                   width: 1.0,
                 ),
@@ -339,47 +339,50 @@ class _FormAddState extends ConsumerState<FormAdd> {
               spacing: 10,
               runSpacing: 10,
               children: [
-                ..._availableGenres.map((genre) {
-                  final isSelected = _selectedGenres.contains(genre);
-                  return FilterChip(
-                    label: Text(
-                      genre,
-                      style: TextStyle(
-                        color:
-                            isSelected
-                                ? Colors.white
-                                : isDarkMode
-                                ? Colors.white
-                                : Colors.black87,
-                      ),
-                    ),
-                    selected: isSelected,
-                    onSelected: (bool selected) {
-                      setState(() {
-                        if (selected) {
-                          _selectedGenres.add(genre);
-                        } else {
-                          _selectedGenres.remove(genre);
-                        }
-                      });
-                    },
-                    selectedColor: Colors.lightBlue,
-                    backgroundColor:
-                        isDarkMode ? const Color(0xFF282828) : Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      side: BorderSide(
-                        color:
-                            isSelected
-                                ? Colors.lightBlue
-                                : isDarkMode
-                                ? const Color(0xFF282828)
-                                : Colors.lightBlue.shade200,
-                      ),
-                    ),
-                    showCheckmark: false,
-                  );
-                }),
+                ...ref
+                    .watch(genresProvider)
+                    .map((g) => g['name'] as String)
+                    .map((genre) {
+                      final isSelected = _selectedGenres.contains(genre);
+                      return FilterChip(
+                        label: Text(
+                          genre,
+                          style: TextStyle(
+                            color:
+                                isSelected
+                                    ? Colors.white
+                                    : isDarkMode
+                                    ? Colors.white
+                                    : Colors.black87,
+                          ),
+                        ),
+                        selected: isSelected,
+                        onSelected: (bool selected) {
+                          setState(() {
+                            if (selected) {
+                              _selectedGenres.add(genre);
+                            } else {
+                              _selectedGenres.remove(genre);
+                            }
+                          });
+                        },
+                        selectedColor: Colors.lightBlue,
+                        backgroundColor:
+                            isDarkMode ? const Color(0xFF1F2937) : Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20),
+                          side: BorderSide(
+                            color:
+                                isSelected
+                                    ? Colors.lightBlue
+                                    : isDarkMode
+                                    ? const Color(0xFF1F2937)
+                                    : Colors.lightBlue.shade200,
+                          ),
+                        ),
+                        showCheckmark: false,
+                      );
+                    }),
                 ActionChip(
                   avatar: Icon(
                     Icons.add,
@@ -393,7 +396,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
                     ),
                   ),
                   backgroundColor:
-                      isDarkMode ? const Color(0xFF141414) : Colors.white,
+                      isDarkMode ? const Color(0xFF0F1522) : Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),
                     side: BorderSide(
@@ -405,7 +408,46 @@ class _FormAddState extends ConsumerState<FormAdd> {
                     ),
                   ),
                   onPressed: () {
-                    // Action for custom genre
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        final newGenreController = TextEditingController();
+                        return AlertDialog(
+                          title: const Text('Agregar Reseña'),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              InputFormField(
+                                title: 'Nombre del Genero',
+                                hintText: 'e.g. Acción',
+                                maxLength: 20,
+                                keyboardType: TextInputType.text,
+                                labelfont: 15,
+                                controller: newGenreController,
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Cancelar'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                final name = newGenreController.text.trim();
+                                if (name.isNotEmpty) {
+                                  ref
+                                      .read(genresProvider.notifier)
+                                      .addGenre(name);
+                                }
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Agregar'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
               ],
@@ -414,7 +456,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
 
             // 7. Author / Studio
             InputFormField(
-              title: 'Author / Studio',
+              title: 'Autor / Estudio',
               hintText: 'e.g. Studio Ghibli',
               maxLength: 50,
               keyboardType: TextInputType.text,
@@ -428,7 +470,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
               children: [
                 Expanded(
                   child: InputFormField(
-                    title: 'Season',
+                    title: 'Temporada',
                     hintText: '-',
                     maxLength: 2,
                     keyboardType: TextInputType.number,
@@ -439,7 +481,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
                 const SizedBox(width: 15),
                 Expanded(
                   child: InputFormField(
-                    title: 'Chapters',
+                    title: 'Capitulos',
                     hintText: '-',
                     maxLength: 4,
                     keyboardType: TextInputType.number,
@@ -450,7 +492,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
                 const SizedBox(width: 15),
                 Expanded(
                   child: InputFormField(
-                    title: 'Ep. Dur.',
+                    title: 'Cap. Dur.',
                     hintText: '- m',
                     maxLength: 3,
                     keyboardType: TextInputType.number,
@@ -464,8 +506,8 @@ class _FormAddState extends ConsumerState<FormAdd> {
 
             // 9. Favorite Characters
             InputFormField(
-              title: 'Favorite Characters',
-              hintText: 'Separate with commas',
+              title: 'Personajes Favoritos',
+              hintText: 'Separa por Comas',
               maxLength: 100,
               keyboardType: TextInputType.text,
               labelfont: 15,
@@ -487,7 +529,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
                 ),
                 icon: const Icon(Icons.save, color: Colors.white),
                 label: const Text(
-                  'Save Review',
+                  'Guardar Reseña',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,

@@ -35,10 +35,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: isDarkMode ? const Color(0xFF141414) : null,
+      backgroundColor:
+          isDarkMode ? const Color.fromARGB(25, 245, 245, 240) : null,
       appBar: AppBarMenu(
         preferredSize: const Size(double.infinity, 60),
-        child: Container(),
+        child: SizedBox(),
       ),
       body: Column(
         children: [
