@@ -168,27 +168,7 @@ class _NavigationDrawerListState extends ConsumerState<NavigationDrawerList> {
                       activeThumbColor: blue,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  ListTile(
-                    leading: const Icon(Icons.logout, color: Colors.red),
-                    title: const Text(
-                      'Salir',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onTap: () async {
-                      final signOut = ref.read(signOutUsecaseProvider);
-                      await signOut.execute();
-                      ref.read(authStateProvider.notifier).clearUser();
-                      if (context.mounted) {
-                        context.go('/signin');
-                      }
-                      widget.scaffoldKey.currentState?.closeDrawer();
-                    },
-                  ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 30),
                 ],
               ),
             ),

@@ -101,7 +101,35 @@ class _FormAddState extends ConsumerState<FormAdd> {
   }
 
   void _saveReview() {
-    if (!_formKey.currentState!.validate()) return;
+    if (!_formKey.currentState!.validate()) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Por favor, completa los campos obligatorios.'),
+        ),
+      );
+      return;
+    }
+
+    if (_imagePath.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('La imagen de portada es obligatoria.')),
+      );
+      return;
+    }
+
+    if (_rating == 0.0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('La calificación es obligatoria.')),
+      );
+      return;
+    }
+
+    if (_selectedGenres.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Debes seleccionar al menos un género.')),
+      );
+      return;
+    }
 
     final review = Review(
       id: widget.review?.id ?? const Uuid().v4(),
@@ -202,7 +230,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              'Add Cover Image',
+                              'Agregar Imagen de Portada',
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
@@ -212,7 +240,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
                             ),
                             const SizedBox(height: 5),
                             const Text(
-                              'JPEG, PNG up to 5MB',
+                              'JPEG, PNG hasta 5MB',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.grey,
@@ -230,7 +258,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
                   child: TextButton(
                     onPressed: _removeImage,
                     child: const Text(
-                      'Remove Image',
+                      'Eliminar Imagen',
                       style: TextStyle(color: Colors.red),
                     ),
                   ),
@@ -256,9 +284,9 @@ class _FormAddState extends ConsumerState<FormAdd> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Your Rating',
+                    'Tu Calificación',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.w500,
                       color: isDarkMode ? Colors.white : Colors.black87,
                     ),
@@ -274,23 +302,35 @@ class _FormAddState extends ConsumerState<FormAdd> {
 
             // 3. Title
             InputFormField(
-              title: 'Title',
-              hintText: 'What are you reviewing?',
+              title: 'Titulo',
+              hintText: '¿Qué estás reseñando?',
               maxLength: 50,
               keyboardType: TextInputType.text,
               labelfont: 15,
               controller: _titleController,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'El título es obligatorio';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 20),
 
             // 4. Review
             InputFormField(
               title: 'Review',
-              hintText: 'Write your thoughts here...',
+              hintText: 'Escribe tus pensamientos aquí...',
               maxLength: 1000,
               keyboardType: TextInputType.multiline,
               labelfont: 15,
               controller: _synopsisController,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'La reseña es obligatoria';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 20),
 
@@ -299,8 +339,8 @@ class _FormAddState extends ConsumerState<FormAdd> {
               children: [
                 Expanded(
                   child: DropDownButton(
-                    title: 'Type',
-                    hintText: 'Select type',
+                    title: 'Tipo de Contenido',
+                    hintText: 'Seleccionar tipo',
                     initialValue: _contentType,
                     onOptionSelected: (category) {
                       setState(() {
@@ -314,12 +354,18 @@ class _FormAddState extends ConsumerState<FormAdd> {
                 const SizedBox(width: 15),
                 Expanded(
                   child: InputFormField(
-                    title: 'Platform',
-                    hintText: 'Select platform',
+                    title: 'Plataforma',
+                    hintText: 'Seleccionar Plataforma',
                     maxLength: 30,
                     keyboardType: TextInputType.text,
                     labelfont: 15,
                     controller: _platformController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Obligatorio';
+                      }
+                      return null;
+                    },
                   ),
                 ),
               ],
@@ -328,7 +374,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
 
             // 6. Genres Chips
             Text(
-              'Genres',
+              'Generos',
               style: TextStyle(
                 fontSize: 14,
                 color: isDarkMode ? Colors.white70 : Colors.black87,
@@ -390,7 +436,7 @@ class _FormAddState extends ConsumerState<FormAdd> {
                     color: isDarkMode ? Colors.white70 : Colors.black54,
                   ),
                   label: Text(
-                    'Add',
+                    'Agregar',
                     style: TextStyle(
                       color: isDarkMode ? Colors.white70 : Colors.black87,
                     ),
@@ -462,6 +508,12 @@ class _FormAddState extends ConsumerState<FormAdd> {
               keyboardType: TextInputType.text,
               labelfont: 15,
               controller: _authorController,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'El autor/estudio es obligatorio';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 20),
 
@@ -476,6 +528,12 @@ class _FormAddState extends ConsumerState<FormAdd> {
                     keyboardType: TextInputType.number,
                     labelfont: 15,
                     controller: _seasonController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Obligatorio';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 const SizedBox(width: 15),
@@ -487,6 +545,12 @@ class _FormAddState extends ConsumerState<FormAdd> {
                     keyboardType: TextInputType.number,
                     labelfont: 15,
                     controller: _episodesController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Obligatorio';
+                      }
+                      return null;
+                    },
                   ),
                 ),
                 const SizedBox(width: 15),
@@ -498,6 +562,12 @@ class _FormAddState extends ConsumerState<FormAdd> {
                     keyboardType: TextInputType.number,
                     labelfont: 15,
                     controller: _durationController,
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Obligatorio';
+                      }
+                      return null;
+                    },
                   ),
                 ),
               ],
@@ -512,6 +582,12 @@ class _FormAddState extends ConsumerState<FormAdd> {
               keyboardType: TextInputType.text,
               labelfont: 15,
               controller: _charactersController,
+              validator: (value) {
+                if (value == null || value.trim().isEmpty) {
+                  return 'Obligatorio';
+                }
+                return null;
+              },
             ),
             const SizedBox(height: 30),
 

@@ -268,7 +268,9 @@ class ConfigView extends ConsumerWidget {
               textColor: textColor,
               cardColor: cardColor,
               trailing: Icon(Icons.chevron_right, color: subtitleColor),
-              onTap: () {},
+              onTap: () {
+                context.push('/about');
+              },
             ),
             const SizedBox(height: 8),
             _SettingsTile(

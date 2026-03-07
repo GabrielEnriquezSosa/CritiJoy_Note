@@ -10,6 +10,7 @@ import 'package:critijoy_note/features/reviews/presentation/views/authors_view.d
 import 'package:critijoy_note/features/auth/presentation/views/sign_in_view.dart';
 import 'package:critijoy_note/features/auth/presentation/views/sign_up_view.dart';
 import 'package:critijoy_note/features/auth/presentation/views/edit_profile_view.dart';
+import 'package:critijoy_note/features/reviews/presentation/views/about_view.dart';
 import 'package:critijoy_note/features/reviews/domain/models/review.dart';
 import 'package:go_router/go_router.dart';
 
@@ -44,5 +45,6 @@ final approuter = GoRouter(
     ),
     GoRoute(path: '/analytics', builder: (context, state) => AnalyticsView()),
     GoRoute(path: '/config', builder: (context, state) => ConfigView()),
+    GoRoute(path: '/about', builder: (context, state) => const AboutView()),
   ],
 );
